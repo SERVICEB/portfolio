@@ -6,10 +6,9 @@ const Header = () => {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
 
-  // Gestion du scroll pour l'effet de flou
   useEffect(() => {
     const handleScroll = () => {
-      setIsScrolled(window.scrollY > 50);
+      setIsScrolled(window.scrollY > 20); // Plus réactif au scroll
     };
     window.addEventListener('scroll', handleScroll);
     return () => window.removeEventListener('scroll', handleScroll);
@@ -25,25 +24,26 @@ const Header = () => {
 
   return (
     <header 
-      className={`fixed w-full z-[100] transition-all duration-300 ${
+      className={`fixed top-0 left-0 w-full z-[100] transition-all duration-300 ${
         isScrolled 
-        ? 'py-4 bg-black/90 backdrop-blur-md shadow-2xl border-b border-white/5' 
-        : 'py-6 bg-transparent'
+        ? 'py-3 bg-black shadow-2xl border-b border-white/10' 
+        : 'py-4 md:py-6 bg-transparent' // Moins de padding sur mobile dès le départ
       }`}
     >
-      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center bg-[#111] rounded-full mt-2">
+      {/* Conteneur interne : Retrait du bg-[#111] pour éviter les décalages visuels */}
+      <div className="max-w-7xl mx-auto px-6 flex justify-between items-center">
         
         {/* Logo */}
         <motion.a 
           href="#"
           initial={{ opacity: 0, x: -20 }}
           animate={{ opacity: 1, x: 0 }}
-          className="text-2xl font-bold flex items-center gap-2 group"
+          className="text-xl md:text-2xl font-bold flex items-center gap-2 group"
         >
-          <span className="bg-primary text-white px-2.5 py-1 rounded-lg group-hover:rotate-12 transition-transform duration-300">
+          <span className="bg-primary text-white px-2 py-0.5 md:px-2.5 md:py-1 rounded-lg">
             S
           </span>
-          <span className="text-white tracking-tighter">SOSTHENE<span className="text-primary">.</span>DEV</span>
+          <span className="text-white tracking-tighter">SOSTHENE.DEV</span>
         </motion.a>
 
         {/* Navigation Desktop */}
@@ -67,45 +67,44 @@ const Header = () => {
           </a>
         </nav>
 
-        {/* Bouton Menu Mobile */}
-        <div className="md:hidden">
+        {/* Bouton Menu Mobile - Optimisé pour toucher le bord */}
+        <div className="md:hidden flex items-center">
           <button 
             onClick={() => setIsMobileMenuOpen(!isMobileMenuOpen)}
-            className="p-2 text-white bg-white/5 rounded-lg border border-white/10"
+            className="p-2 text-white bg-white/5 rounded-lg border border-white/10 active:bg-white/10 transition-colors"
           >
             {isMobileMenuOpen ? <X size={24} /> : <Menu size={24} />}
           </button>
         </div>
       </div>
 
-      {/* Menu Mobile - Overlay Noir Sombre */}
+      {/* Menu Mobile - Collé au header */}
       <AnimatePresence>
         {isMobileMenuOpen && (
           <motion.div
-            initial={{ opacity: 0, y: -20 }}
+            initial={{ opacity: 0, y: -10 }}
             animate={{ opacity: 1, y: 0 }}
-            exit={{ opacity: 0, y: -20 }}
-            className="absolute top-full left-0 w-full bg-[#0a0a0a] border-b border-white/10 shadow-2xl md:hidden overflow-hidden"
+            exit={{ opacity: 0, y: -10 }}
+            className="absolute top-full left-0 w-full bg-black border-b border-white/10 shadow-2xl md:hidden"
           >
-            <div className="flex flex-col p-8 gap-6">
+            <div className="flex flex-col p-6 gap-5">
               {navLinks.map((link, index) => (
                 <motion.a
                   initial={{ opacity: 0, x: -10 }}
                   animate={{ opacity: 1, x: 0 }}
-                  transition={{ delay: index * 0.1 }}
+                  transition={{ delay: index * 0.05 }}
                   key={link.name}
                   href={link.href}
                   onClick={() => setIsMobileMenuOpen(false)}
-                  className="text-xl font-bold text-gray-200 hover:text-primary transition-colors flex justify-between items-center group"
+                  className="text-lg font-bold text-gray-200 hover:text-primary transition-colors"
                 >
                   {link.name}
-                  <span className="w-2 h-2 rounded-full bg-primary opacity-0 group-hover:opacity-100 transition-opacity"></span>
                 </motion.a>
               ))}
               <a 
                 href="#contact"
                 onClick={() => setIsMobileMenuOpen(false)}
-                className="w-full py-4 bg-primary text-white rounded-xl text-center font-bold text-lg"
+                className="w-full py-3.5 bg-primary text-white rounded-xl text-center font-bold"
               >
                 Engagez-moi
               </a>
