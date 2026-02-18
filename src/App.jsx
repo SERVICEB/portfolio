@@ -1,12 +1,8 @@
 import React from 'react';
-// Icônes et UI
 import { MessageCircle } from 'lucide-react'; 
 
-// Composants de structure
 import Header from './components/Header';
 import SectionWrapper from './components/SectionWrapper';
-
-// Sections du portfolio
 import Hero from './components/Hero';
 import About from './components/About';
 import Projects from './components/Projects';
@@ -15,80 +11,48 @@ import Contact from './components/Contacts';
 
 function App() {
   return (
-    /**
-     * CONFIGURATION DU CONTENEUR :
-     * - h-screen : On bloque la hauteur à celle de l'écran.
-     * - overflow-y-auto : On permet le défilement vertical.
-     * - snap-y snap-mandatory : Force l'arrêt précis sur chaque section (magnétisme).
-     */
-    <div className="h-screen overflow-y-auto snap-y snap-mandatory bg-background-dark text-white antialiased selection:bg-primary/30 scroll-smooth">
+    /* - Suppression de overflow-x-hidden ici si possible, ou assure-toi qu'il 
+         est sur une div qui ne bloque pas le scroll parent.
+       - 'block' assure que le flux CSS est standard.
+    */
+    <div className="relative block w-full bg-background-dark text-white antialiased">
       
-      {/* Le Header reste fixé en haut grâce à son propre CSS (fixé ou sticky) */}
       <Header />
       
-      <main>
-        {/** * MOTIF DE SECTION :
-         * Chaque <section> définit la zone de "Snap" (100vh).
-         * La div interne "sticky top-0" permet l'effet de superposition (engloutissement).
-         */}
-
-        {/* --- SECTION 1 : ACCUEIL --- */}
-        <section className="relative h-screen w-full snap-start snap-always">
-          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            <SectionWrapper><Hero /></SectionWrapper>
-          </div>
+      <main className="relative w-full">
+        {/* Sur mobile, on évite absolument 'h-screen' sur les balises <section>.
+           On laisse le contenu (Hero, About, etc.) pousser la hauteur.
+        */}
+        <section id="home" className="w-full min-h-[fit-content]">
+          <SectionWrapper><Hero /></SectionWrapper>
         </section>
 
-        {/* --- SECTION 2 : À PROPOS --- */}
-        <section className="relative h-screen w-full snap-start snap-always">
-          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            <SectionWrapper><About /></SectionWrapper>
-          </div>
+        <section id="about" className="w-full min-h-[fit-content]">
+          <SectionWrapper><About /></SectionWrapper>
         </section>
 
-        {/* --- SECTION 3 : PROJETS --- */}
-        <section className="relative h-screen w-full snap-start snap-always">
-          {/* Note : overflow-y-auto ici pour permettre de voir tous les projets 
-              si la liste est longue, tout en restant "collé" en haut. */}
-          <div className="sticky top-0 h-screen w-full overflow-y-auto custom-scrollbar">
-            <SectionWrapper>
-              <Projects />
-            </SectionWrapper>
-          </div>
+        <section id="projects" className="w-full min-h-[fit-content]">
+          <SectionWrapper><Projects /></SectionWrapper>
         </section>
           
-        {/* --- SECTION 4 : COMPÉTENCES --- */}
-        <section className="relative h-screen w-full snap-start snap-always">
-          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            <SectionWrapper>
-              <Skills />
-            </SectionWrapper>
-          </div>
+        <section id="skills" className="w-full min-h-[fit-content]">
+          <SectionWrapper><Skills /></SectionWrapper>
         </section>
 
-        {/* --- SECTION 5 : CONTACT --- */}
-        <section className="relative h-screen w-full snap-start snap-always">
-          <div className="sticky top-0 h-screen w-full overflow-hidden">
-            <SectionWrapper>
-              <Contact />
-            </SectionWrapper>
-          </div>
+        <section id="contact" className="w-full min-h-[fit-content]">
+          <SectionWrapper><Contact /></SectionWrapper>
         </section>
       </main>
 
-      {/* --- BOUTON FLOTTANT WHATSAPP --- 
-          Placé en dehors du <main> pour rester visible peu importe la section.
-      */}
+      {/* Bouton WhatsApp */}
       <a 
         href="https://wa.me/2250789569522"
-        className="fixed bottom-6 right-6 z-[60] p-4 bg-[#25D366] text-white rounded-full shadow-lg hover:scale-110 active:scale-95 transition-transform flex items-center justify-center"
+        className="fixed bottom-6 right-6 z-[60] p-4 bg-[#25D366] text-white rounded-full shadow-lg"
         target="_blank"
         rel="noreferrer"
-        aria-label="Contactez-moi sur WhatsApp"
       >
         <MessageCircle size={30} />
       </a>
-
     </div>
   );
 }

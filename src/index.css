@@ -1,47 +1,84 @@
-
 @import "tailwindcss";
 
-/* 1. ON DÉFINIT LE THÈME D'ABORD */
+/* 1. DÉFINITION DU THÈME */
 @theme {
   --color-primary: #f48506;
   --color-primary-dark: #d66e00;
   --color-background-light: #f8f7f5;
-  --color-background-dark: #231a0f;
+  --color-background-dark: #050505; 
   --color-surface-light: #ffffff;
-  --color-surface-dark: #2d2419;
+  --color-surface-dark: #111111;
 }
 
-/* 2. ON UTILISE @APPLY ENSUITE */
+/* 2. COMPORTEMENT GLOBAL (CORRIGÉ POUR MOBILE) */
+html {
+  scroll-behavior: smooth !important;
+  /* On s'assure que le scroll n'est pas bloqué */
+  overflow-x: hidden;
+  overflow-y: auto;
+  height: auto;
+  min-height: 100%;
+}
+
 body {
-  background-color: var(--color-background-light); /* Méthode CSS standard, plus sûre */
-  @apply text-gray-900;
-}
-/* index.css */
-.section {
-  scroll-margin-top: 100px; /* L'espace laissé pour le Header en haut */
-}
-
-.dark body {
   background-color: var(--color-background-dark);
-  @apply text-white;
+  color: white;
+  margin: 0;
+  padding: 0;
+  /* Désactive tout système de snap resté en cache */
+  scroll-snap-type: none !important;
+  /* Important pour le scroll fluide sur iOS */
+  -webkit-overflow-scrolling: touch;
+  line-height: 1.5;
+  min-height: 100vh;
 }
 
-/* Cache la barre de scroll tout en permettant le défilement */
-.custom-scrollbar::-webkit-scrollbar {
-  width: 5px;
+/* 3. OPTIMISATION DES SECTIONS */
+section {
+  /* Espace pour le Header fixe */
+  scroll-margin-top: 80px;
+  /* On force le flux normal sur mobile */
+  position: relative;
+  display: block;
+  width: 100%;
 }
-.custom-scrollbar::-webkit-scrollbar-track {
-  background: transparent;
+
+/* 4. BARRE DE SCROLL PERSONNALISÉE */
+::-webkit-scrollbar {
+  width: 8px;
 }
-.custom-scrollbar::-webkit-scrollbar-thumb {
-  background: #f48506; /* Ta couleur primary */
+
+::-webkit-scrollbar-track {
+  background: #0a0a0a;
+}
+
+::-webkit-scrollbar-thumb {
+  background: var(--color-primary);
   border-radius: 10px;
+  border: 2px solid #0a0a0a;
 }
 
-/* Dans ton index.css */
-@layer base {
-  html {
-    scrollbar-width: thin;
-    scrollbar-color: #f48506 transparent;
+/* 5. FIX POUR MOBILE : EMPÊCHER LES ÉLÉMENTS FIXES DE BLOQUER */
+@media (max-width: 768px) {
+  html, body {
+    /* Évite le rebond bizarre sur certains navigateurs mobiles */
+    overscroll-behavior-y: none;
   }
+}
+
+/* Firefox support */
+@layer base {
+  * {
+    scrollbar-width: thin;
+    scrollbar-color: var(--color-primary) #0a0a0a;
+  }
+}
+
+/* Utilitaires */
+.no-scrollbar {
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+.no-scrollbar::-webkit-scrollbar {
+  display: none;
 }
