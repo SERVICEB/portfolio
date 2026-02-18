@@ -1,0 +1,47 @@
+
+@import "tailwindcss";
+
+/* 1. ON DÉFINIT LE THÈME D'ABORD */
+@theme {
+  --color-primary: #f48506;
+  --color-primary-dark: #d66e00;
+  --color-background-light: #f8f7f5;
+  --color-background-dark: #231a0f;
+  --color-surface-light: #ffffff;
+  --color-surface-dark: #2d2419;
+}
+
+/* 2. ON UTILISE @APPLY ENSUITE */
+body {
+  background-color: var(--color-background-light); /* Méthode CSS standard, plus sûre */
+  @apply text-gray-900;
+}
+/* index.css */
+.section {
+  scroll-margin-top: 100px; /* L'espace laissé pour le Header en haut */
+}
+
+.dark body {
+  background-color: var(--color-background-dark);
+  @apply text-white;
+}
+
+/* Cache la barre de scroll tout en permettant le défilement */
+.custom-scrollbar::-webkit-scrollbar {
+  width: 5px;
+}
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: transparent;
+}
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background: #f48506; /* Ta couleur primary */
+  border-radius: 10px;
+}
+
+/* Dans ton index.css */
+@layer base {
+  html {
+    scrollbar-width: thin;
+    scrollbar-color: #f48506 transparent;
+  }
+}
